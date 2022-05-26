@@ -23,12 +23,16 @@ export const rootReducer = (state = initState, action) => {
           overwrite: false,
         };
       }
-      if (state.previousOperand && /(\+|\-|\*|\÷)/.test(state.operation) === false) return {
-        ...state,
-        previousOperand: `${state.previousOperand || ""}${action.payload}`,
-        operation: null,
-        currentOperand: null
-      }
+      if (
+        state.previousOperand &&
+        /(\+|\-|\*|\÷)/.test(state.operation) === false
+      )
+        return {
+          ...state,
+          previousOperand: `${state.previousOperand || ""}${action.payload}`,
+          operation: null,
+          currentOperand: null,
+        };
       if (action.payload === "0" && state.currentOperand === "0") return state;
       if (action.payload === "." && state.currentOperand.includes("."))
         return state;
@@ -41,7 +45,7 @@ export const rootReducer = (state = initState, action) => {
       if (state.currentOperand == null && state.previousOperand == null)
         return state;
 
-      if (state.previousOperand == null) {
+      if (state.previousOperand == null || state.previousOperand == "") {
         return {
           ...state,
           operation: action.payload,
@@ -114,7 +118,7 @@ export const rootReducer = (state = initState, action) => {
 
       return {
         ...state,
-        overwrite: true,
+        overwrite: false,
         currentOperand: state.currentOperand.slice(0, -1),
       };
 
